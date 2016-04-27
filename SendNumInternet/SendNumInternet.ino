@@ -9,7 +9,7 @@ byte gateway[] = { 172, 16, 13, 254 };
 //byte server[] = { 45, 55, 150, 245 }; // IP Publico de un servidor
 byte server[] = { 172, 16, 13, 15 };    // IPServidor LAN
 
-int numero = 0;
+
 
 boolean lastConnected = false;                 // state of the connection last time through the main loop
 EthernetClient client;
@@ -60,12 +60,19 @@ void loop()
 void httpRequest() {
   // if there's a successful connection:
   if (client.connect(server, 80)) {
-    numero = numero + 2;
+    int potenciometro1=analogRead(A0)/190;
+    int potenciometro2=analogRead(A1)/190;
+    int potenciometro3=analogRead(A2)/190;
+    
     Serial.println("connecting...");
     // send the HTTP PUT request:
     //client.print("GET /index/Template/InsertData2.php?equipo=5&sensor1=1&sensor2=3&valor1="); // Envia los datos utilizando GET
-    client.print("GET /DevPHP/Proyecto1/insert.data.php?numero="); // Envia los datos LAN
-    client.print(numero);
+    client.print("GET /DevPHP/Proyecto1/insert.data.php?dato1="); // Envia los datos LAN
+    client.print(potenciometro1);
+    client.print("&dato2=");
+    client.print(potenciometro2);
+    client.print("&dato3=");
+    client.print(potenciometro3);
     client.println(" HTTP/1.0");
     client.println();
     
@@ -79,4 +86,3 @@ void httpRequest() {
     client.stop();
   }
 }
-
